@@ -29,7 +29,10 @@ function createWindow() {
     console.log("Window loaded, sending message...");
     // Add a small delay to ensure renderer is ready
     setTimeout(() => {
-      win?.webContents.send("system-message", "Check the connection before executing queries.");
+      win?.webContents.send(
+        "system-message",
+        "Check the connection before executing queries."
+      );
     }, 1000);
   });
 
@@ -55,19 +58,23 @@ app.on("activate", () => {
 
 app.whenReady().then(createWindow);
 
-// Handle connect-to-couchbase message from renderer
-ipcMain.on("connect-to-couchbase", async (event, formData) => {
-  console.log("Received connect-to-couchbase request from renderer:", event);
-  console.log("Form data:", formData);
-
+ipcMain.on("connect-to-couchbase", async (_event, formData) => {
   process.env["SERVER_URL"] = formData.serverUrl;
   process.env["USERNAME"] = formData.username;
   process.env["PASSWORD"] = formData.password;
   process.env["BUCKET_NAME"] = formData.bucketName;
   process.env["SCOPE_NAME"] = formData.scopeName;
 
-  const data = await CouchbaseConnector.getInstance();
+  win?.webContents.send(
+    "system-message",
+    "Checking the connection please wait..."
+  );
 
-  // @ts-expect-error temporary
-  win?.webContents.send("main-process-message", data.results);
+  const isConnectionValid = await CouchbaseConnector.isConnectionValid();
+
+  if (isConnectionValid) {
+    win?.webContents.send("system-message", "Connection successful!");
+  } else {
+    win?.webContents.send("system-message", "Connection failed!");
+  }
 });

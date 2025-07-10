@@ -18,7 +18,6 @@ function ConnectionCreator() {
   };
 
   const handleConnect = () => {
-    // Send IPC call with form data
     window.ipcRenderer.send("connect-to-couchbase", formData);
   };
 

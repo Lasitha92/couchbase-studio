@@ -1,14 +1,12 @@
 export class CouchbaseConnector {
   private constructor() {}
 
-  public static async getInstance(): Promise<void> {
-    console.log("Hi");
-
+  public static async isConnectionValid(): Promise<boolean> {
     const connectionString = process.env["SERVER_URL"];
     const username = process.env["USERNAME"];
     const password = process.env["PASSWORD"];
     const bucketName = process.env["BUCKET_NAME"];
-    const scopeName = process.env["SCOPE_NAME"];
+    const scopeName = process.env["SCOPE_NAMES"];
 
     try {
       const response = await fetch(
@@ -20,15 +18,19 @@ export class CouchbaseConnector {
             Authorization: "Basic " + btoa(`${username}:${password}`),
           },
           body: JSON.stringify({
-            statement: `SELECT META().id, o.* FROM \`${bucketName}\`.\`${scopeName}\`.orders as o Limit 5;`,
+            statement: `SELECT * FROM system:scopes WHERE bucket_name = "${bucketName}" AND name = "${scopeName}";`,
           }),
         }
       );
 
-      const data = await response.json();
-      return data;
+      if (!response.ok) {
+        return false;
+      }
+
+      return true;
     } catch (error) {
       console.error("Error connecting to Couchbase:", error);
+      return false;
     }
   }
 }

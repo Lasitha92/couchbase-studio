@@ -6,6 +6,7 @@ import "./index.css";
 // Extend Window interface
 declare global {
   interface Window {
+    systemMessage: string;
     query1Result: unknown | null;
   }
 }
@@ -13,11 +14,18 @@ declare global {
 window.query1Result = "Your response will be displayed here";
 
 window.ipcRenderer.on(
-  "main-process-message",
+  "query-result-1",
   (_event: unknown, message: unknown) => {
-    console.log("Received message from main process:", message);
-    window.query1Result = message as string;
-    window.dispatchEvent(new CustomEvent("main-process-message-updated"));
+    window.query1Result = message;
+    window.dispatchEvent(new CustomEvent("query-result-1-updated"));
+  }
+);
+
+window.ipcRenderer.on(
+  "system-message",
+  (_event: unknown, message: unknown) => {
+    window.systemMessage = message as string;
+    window.dispatchEvent(new CustomEvent("system-message-updated"));
   }
 );
 

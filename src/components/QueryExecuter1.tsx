@@ -7,22 +7,20 @@ const QueryExecuter1: React.FC = () => {
 
   useEffect(() => {
     const handleMessageUpdate = () => {
-      console.log("Handling message update in Tab component");
       const message = window.query1Result;
       if (message) {
         setQueryResult(message);
-        console.log("Tab received message:", message);
       }
     };
 
     window.addEventListener(
-      "main-process-message-updated",
+      "query-result-1-updated",
       handleMessageUpdate
     );
 
     return () => {
       window.removeEventListener(
-        "main-process-message-updated",
+        "query-result-1-updated",
         handleMessageUpdate
       );
     };
