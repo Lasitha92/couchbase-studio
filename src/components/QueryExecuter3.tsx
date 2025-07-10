@@ -3,14 +3,14 @@ import JsonView from "@uiw/react-json-view";
 import React, { useEffect, useState } from "react";
 
 const QueryExecuter3: React.FC = () => {
-  const [mainProcessMessage, setMainProcessMessage] = useState<unknown>(null);
+  const [queryResult, setQueryResult] = useState<unknown>(null);
 
   useEffect(() => {
     const handleMessageUpdate = () => {
       console.log("Handling message update in Tab component");
       const message = window.query1Result;
       if (message) {
-        setMainProcessMessage(message);
+        setQueryResult(message);
         console.log("Tab received message:", message);
       }
     };
@@ -30,7 +30,7 @@ const QueryExecuter3: React.FC = () => {
 
   return (
     <>
-      <Grid container size={12} spacing={2} padding={1}>
+      <Grid container size={12} spacing={1}>
         <TextareaAutosize
           aria-label="minimum height"
           minRows={6}
@@ -38,34 +38,33 @@ const QueryExecuter3: React.FC = () => {
           style={{ width: "100%" }}
         />
       </Grid>
-      <Grid
-        container
-        size={12}
-        spacing={2}
-        padding={1}
-        justifyContent={"center"}
+      <Box
+        component="pre"
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+        }}
       >
         <Button variant="contained">Execute</Button>
-      </Grid>
-      <Grid container size={12} spacing={2} padding={1}>
-        <Box
-          component="pre"
-          sx={{
-            bgcolor: "grey.200",
-            p: 2,
-            width: "100%",
-            minHeight: "300px",
-            display: "flex",
-            alignItems: "left",
-          }}
-        >
-          {mainProcessMessage ? (
-            <JsonView value={mainProcessMessage} displayDataTypes={false} />
-          ) : (
-            "This is executer 3. Your result will be displayed here"
-          )}
-        </Box>
-      </Grid>
+      </Box>
+
+      <Box
+        component="pre"
+        sx={{
+          bgcolor: "grey.200",
+          width: "100%",
+          minHeight: "300px",
+          display: "flex",
+          alignItems: "left",
+        }}
+      >
+        {queryResult ? (
+          <JsonView value={queryResult} displayDataTypes={false} />
+        ) : (
+          "This is executer 3. Your result will be displayed here"
+        )}
+      </Box>
     </>
   );
 };

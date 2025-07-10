@@ -10,7 +10,7 @@ interface TabPanelProps {
   value: number;
 }
 
-function CustomTabPanel(props: TabPanelProps) {
+function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
   return (
@@ -48,20 +48,20 @@ const ExecuterTabs = () => {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab label="Item One" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
+          <Tab label="Query 1" {...a11yProps(0)} />
+          <Tab label="Query 2" {...a11yProps(1)} />
+          <Tab label="Query 3" {...a11yProps(2)} />
         </Tabs>
       </Box>
-      <CustomTabPanel value={value} index={0}>
+      <TabPanel value={value} index={0}>
         <QueryExecuter1 />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
+      </TabPanel>
+      <TabPanel value={value} index={1}>
         <QueryExecuter2 />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
+      </TabPanel>
+      <TabPanel value={value} index={2}>
         <QueryExecuter3 />
-      </CustomTabPanel>
+      </TabPanel>
     </Box>
   );
 };

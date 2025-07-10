@@ -29,8 +29,7 @@ function createWindow() {
     console.log("Window loaded, sending message...");
     // Add a small delay to ensure renderer is ready
     setTimeout(() => {
-      win?.webContents.send("main-process-message", new Date().toISOString());
-      console.log("Message sent to renderer");
+      win?.webContents.send("system-message", "Check the connection before executing queries.");
     }, 1000);
   });
 

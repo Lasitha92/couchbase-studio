@@ -23,7 +23,7 @@ function ConnectionCreator() {
   };
 
   return (
-    <Grid container spacing={2} padding={1}>
+    <Grid container spacing={2}>
       <Grid size={2}>
         <TextField
           id="serverUrl"
