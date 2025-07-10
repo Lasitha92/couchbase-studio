@@ -1,0 +1,12 @@
+// tsconfig.main.json
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+      "module": "CommonJS",
+      "outDir": "dist/main",
+      "rootDir": "electron", // assuming main.ts is here
+      "noEmit": false
+    },
+    "include": ["electron/**/*"]
+  }
+  
