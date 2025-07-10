@@ -3,7 +3,9 @@ import JsonView from "@uiw/react-json-view";
 import React, { useEffect, useState } from "react";
 
 const QueryExecuter2: React.FC = () => {
-  const [queryResult, setQueryResult] = useState<unknown>(null);
+  const [queryResult, setQueryResult] = useState<unknown>(
+    () => window.query2Result
+  );
   const [query, setQuery] = useState("");
 
   useEffect(() => {
