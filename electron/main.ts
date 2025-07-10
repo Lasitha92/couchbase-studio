@@ -68,8 +68,7 @@ ipcMain.on("connect-to-couchbase", async (event, formData) => {
   process.env["SCOPE_NAME"] = formData.scopeName;
 
   const data = await CouchbaseConnector.getInstance();
-  win?.webContents.send(
-    "main-process-message",
-    data.results
-  );
+
+  // @ts-expect-error temporary
+  win?.webContents.send("main-process-message", data.results);
 });
