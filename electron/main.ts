@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain } from "electron";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { CouchbaseConnector } from "./services/CouchbaseConnector.js";
+import fs from "node:fs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -33,6 +34,19 @@ function createWindow() {
         "system-message",
         "Check the connection before executing queries."
       );
+      // Read configs.json and send configs to renderer
+      try {
+        const configPath = path.join(process.env.APP_ROOT, "configs.json");
+        const configRaw = fs.readFileSync(configPath, "utf-8");
+        const config = JSON.parse(configRaw);
+        win?.webContents.send("app-config", config);
+      } catch (err) {
+        console.error("Failed to read configs.json:", err);
+        win?.webContents.send(
+          "system-message",
+          "Failed to load configuration file."
+        );
+      }
     }, 1000);
   });
 

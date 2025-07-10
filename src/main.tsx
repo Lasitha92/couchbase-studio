@@ -5,7 +5,16 @@ import "./index.css";
 
 // Extend Window interface
 declare global {
+  interface AppConfig {
+    serverUrl: string;
+    username: string;
+    password: string;
+    bucketName: string;
+    scopeName: string;
+  }
+
   interface Window {
+    appConfig: AppConfig | null;
     query1Text: string;
     query2Text: string;
     query3Text: string;
@@ -36,6 +45,11 @@ window.ipcRenderer.on("query-3-result", (_event: unknown, message: unknown) => {
 window.ipcRenderer.on("system-message", (_event: unknown, message: unknown) => {
   window.systemMessage = message as string;
   window.dispatchEvent(new CustomEvent("system-message-updated"));
+});
+
+window.ipcRenderer.on("app-config", (_event: unknown, config: unknown) => {
+  window.appConfig = config as AppConfig;
+  window.dispatchEvent(new CustomEvent("app-config-updated"));
 });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

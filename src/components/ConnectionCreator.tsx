@@ -1,5 +1,5 @@
 import { Button, Grid, TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function ConnectionCreator() {
   const [formData, setFormData] = useState({
@@ -9,6 +9,25 @@ function ConnectionCreator() {
     bucketName: "",
     scopeName: "",
   });
+
+  useEffect(() => {
+    const handleAppConfigUpdated = () => {
+      const config = window.appConfig;
+      if (config) {
+        setFormData({
+          serverUrl: config.serverUrl,
+          username: config.username,
+          password: config.password,
+          bucketName: config.bucketName,
+          scopeName: config.scopeName,
+        });
+      }
+    };
+    window.addEventListener("app-config-updated", handleAppConfigUpdated);
+    return () => {
+      window.removeEventListener("app-config-updated", handleAppConfigUpdated);
+    };
+  }, []);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({
