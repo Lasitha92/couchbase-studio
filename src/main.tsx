@@ -6,10 +6,13 @@ import "./index.css";
 // Extend Window interface
 declare global {
   interface Window {
-    systemMessage: string;
+    query1Text: string;
+    query2Text: string;
+    query3Text: string;
     query1Result: unknown | null;
     query2Result: unknown | null;
     query3Result: unknown | null;
+    systemMessage: string;
   }
 }
 

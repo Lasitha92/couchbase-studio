@@ -6,7 +6,7 @@ const QueryExecuter2: React.FC = () => {
   const [queryResult, setQueryResult] = useState<unknown>(
     () => window.query2Result
   );
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(() => window.query2Text || "");
 
   useEffect(() => {
     const handleMessageUpdate = () => {
@@ -32,7 +32,10 @@ const QueryExecuter2: React.FC = () => {
           placeholder="Minimum 3 rows"
           style={{ width: "100%" }}
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            window.query2Text = e.target.value;
+          }}
         />
       </Grid>
       <Box
