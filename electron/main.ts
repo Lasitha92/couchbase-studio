@@ -20,6 +20,7 @@ let win: BrowserWindow | null;
 
 function createWindow() {
   win = new BrowserWindow({
+    title: "Couchbase Studio",
     icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
     webPreferences: {
       preload: path.join(__dirname, "preload.mjs"),
@@ -36,8 +37,12 @@ function createWindow() {
       );
       // Read configs.json and send configs to renderer
       try {
-        const configPath = path.join(process.env.APP_ROOT, "configs.json");
-        const configRaw = fs.readFileSync(configPath, "utf-8");
+        const userConfigPath = path.join(
+          app.getPath("documents"),
+          "CouchbaseStudio",
+          "configs.json"
+        );
+        const configRaw = fs.readFileSync(userConfigPath, "utf-8");
         const config = JSON.parse(configRaw);
         win?.webContents.send("app-config", config);
       } catch (err) {
