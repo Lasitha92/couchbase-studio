@@ -99,6 +99,7 @@ ipcMain.on("query-1-execute", async (_event, query) => {
   try {
     const result = await CouchbaseConnector.executeQuery(query);
     win?.webContents.send("query-1-result", result);
+    win?.webContents.send("system-message", "Query 1 executed successfully.");
   } catch (error) {
     // @ts-expect-error error may not have a message property
     win?.webContents.send("system-message", `Error: ${error.message}`);
@@ -112,6 +113,7 @@ ipcMain.on("query-2-execute", async (_event, query) => {
   try {
     const result = await CouchbaseConnector.executeQuery(query);
     win?.webContents.send("query-2-result", result);
+    win?.webContents.send("system-message", "Query 2 executed successfully.");
   } catch (error) {
     // @ts-expect-error error may not have a message property
     win?.webContents.send("system-message", `Error: ${error.message}`);
@@ -125,6 +127,7 @@ ipcMain.on("query-3-execute", async (_event, query) => {
   try {
     const result = await CouchbaseConnector.executeQuery(query);
     win?.webContents.send("query-3-result", result);
+    win?.webContents.send("system-message", "Query 3 executed successfully.");
   } catch (error) {
     // @ts-expect-error error may not have a message property
     win?.webContents.send("system-message", `Error: ${error.message}`);
