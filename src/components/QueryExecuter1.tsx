@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 
 const QueryExecuter1: React.FC = () => {
   const [queryResult, setQueryResult] = useState<unknown>(null);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     const handleMessageUpdate = () => {
@@ -13,16 +14,10 @@ const QueryExecuter1: React.FC = () => {
       }
     };
 
-    window.addEventListener(
-      "query-result-1-updated",
-      handleMessageUpdate
-    );
+    window.addEventListener("query-result-1-updated", handleMessageUpdate);
 
     return () => {
-      window.removeEventListener(
-        "query-result-1-updated",
-        handleMessageUpdate
-      );
+      window.removeEventListener("query-result-1-updated", handleMessageUpdate);
     };
   }, []);
 
@@ -34,6 +29,8 @@ const QueryExecuter1: React.FC = () => {
           minRows={6}
           placeholder="Minimum 3 rows"
           style={{ width: "100%" }}
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
         />
       </Grid>
       <Box
@@ -44,7 +41,12 @@ const QueryExecuter1: React.FC = () => {
           justifyContent: "center",
         }}
       >
-        <Button variant="contained">Execute</Button>
+        <Button
+          variant="contained"
+          onClick={() => window.ipcRenderer.send("query-1-execute", query)}
+        >
+          Execute
+        </Button>
       </Box>
 
       <Box

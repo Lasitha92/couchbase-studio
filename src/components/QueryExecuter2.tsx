@@ -4,27 +4,20 @@ import React, { useEffect, useState } from "react";
 
 const QueryExecuter2: React.FC = () => {
   const [queryResult, setQueryResult] = useState<unknown>(null);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     const handleMessageUpdate = () => {
-      console.log("Handling message update in Tab component");
-      const message = window.query1Result;
+      const message = window.query2Result;
       if (message) {
         setQueryResult(message);
-        console.log("Tab received message:", message);
       }
     };
 
-    window.addEventListener(
-      "main-process-message-updated",
-      handleMessageUpdate
-    );
+    window.addEventListener("query-result-2-updated", handleMessageUpdate);
 
     return () => {
-      window.removeEventListener(
-        "main-process-message-updated",
-        handleMessageUpdate
-      );
+      window.removeEventListener("query-result-2-updated", handleMessageUpdate);
     };
   }, []);
 
@@ -36,6 +29,8 @@ const QueryExecuter2: React.FC = () => {
           minRows={6}
           placeholder="Minimum 3 rows"
           style={{ width: "100%" }}
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
         />
       </Grid>
       <Box
@@ -46,7 +41,12 @@ const QueryExecuter2: React.FC = () => {
           justifyContent: "center",
         }}
       >
-        <Button variant="contained">Execute</Button>
+        <Button
+          variant="contained"
+          onClick={() => window.ipcRenderer.send("query-2-execute", query)}
+        >
+          Execute
+        </Button>
       </Box>
 
       <Box

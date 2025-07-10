@@ -78,3 +78,42 @@ ipcMain.on("connect-to-couchbase", async (_event, formData) => {
     win?.webContents.send("system-message", "Connection failed!");
   }
 });
+
+ipcMain.on("query-1-execute", async (_event, query) => {
+  win?.webContents.send("system-message", "Executing Query 1...");
+
+  try {
+    const result = await CouchbaseConnector.executeQuery(query);
+    win?.webContents.send("query-1-result", result);
+  } catch (error) {
+    // @ts-expect-error error may not have a message property
+    win?.webContents.send("system-message", `Error: ${error.message}`);
+    console.error("Error executing query 1:", error);
+  }
+});
+
+ipcMain.on("query-2-execute", async (_event, query) => {
+  win?.webContents.send("system-message", "Executing Query 2...");
+
+  try {
+    const result = await CouchbaseConnector.executeQuery(query);
+    win?.webContents.send("query-2-result", result);
+  } catch (error) {
+    // @ts-expect-error error may not have a message property
+    win?.webContents.send("system-message", `Error: ${error.message}`);
+    console.error("Error executing query 2:", error);
+  }
+});
+
+ipcMain.on("query-3-execute", async (_event, query) => {
+  win?.webContents.send("system-message", "Executing Query 3...");
+
+  try {
+    const result = await CouchbaseConnector.executeQuery(query);
+    win?.webContents.send("query-3-result", result);
+  } catch (error) {
+    // @ts-expect-error error may not have a message property
+    win?.webContents.send("system-message", `Error: ${error.message}`);
+    console.error("Error executing query 3:", error);
+  }
+});
