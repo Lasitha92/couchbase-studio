@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, Menu } from "electron";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { CouchbaseConnector } from "./services/CouchbaseConnector.js";
@@ -18,6 +18,58 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
 
 let win: BrowserWindow | null;
 
+const customMenu = [
+  {
+    label: "File",
+    submenu: [
+      {
+        label: "Exit",
+        click: () => {
+          app.quit();
+        },
+      },
+    ],
+  },
+  {
+    label: "Help",
+    submenu: [
+      {
+        label: "About",
+        click: () => {
+          const aboutWindow = new BrowserWindow({
+            width: 400,
+            height: 320,
+            resizable: false,
+            minimizable: false,
+            maximizable: false,
+            autoHideMenuBar: true,
+            parent: win || undefined,
+            modal: true,
+            webPreferences: {
+              nodeIntegration: true,
+              contextIsolation: false,
+            },
+          });
+
+          aboutWindow.loadURL(`data:text/html,
+             <html>
+               <head><title>About Couchbase Studio</title></head>
+               <body style="font-family: Arial, sans-serif; padding: 20px;">
+                 <h2>Couchbase Studio</h2>
+                 <p>Version: 1.0.0</p>
+                 <p>A simple desktop application for querying Couchbase databases.</p>
+                 <hr style="margin: 20px 0;">
+                 <p><strong>Developer:</strong> Lasitha Bandara</p>
+                 <p><strong>Contact:</strong> <a href="mailto:lybandara@gmail.com">lybandara@gmail.com</a></p>
+               </body>
+             </html>
+           `);
+        },
+      },
+    ],
+  },
+];
+
 function createWindow() {
   win = new BrowserWindow({
     title: "Couchbase Studio",
@@ -27,13 +79,16 @@ function createWindow() {
     },
   });
 
+  const menu = Menu.buildFromTemplate(customMenu);
+  Menu.setApplicationMenu(menu);
+
   win.webContents.on("did-finish-load", () => {
     console.log("Window loaded, sending message...");
     // Add a small delay to ensure renderer is ready
     setTimeout(() => {
       win?.webContents.send(
         "system-message",
-        "Check the connection before executing queries."
+        "Connect the database before executing queries."
       );
       // Read configs.json and send configs to renderer
       try {

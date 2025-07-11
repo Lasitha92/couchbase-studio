@@ -25,7 +25,7 @@ declare global {
   }
 }
 
-window.query1Result = "Your response will be displayed here";
+window.query1Result = null;
 
 window.ipcRenderer.on("query-1-result", (_event: unknown, message: unknown) => {
   window.query1Result = message;
