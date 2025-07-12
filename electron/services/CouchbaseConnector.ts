@@ -6,7 +6,7 @@ export class CouchbaseConnector {
     const username = process.env["USERNAME"];
     const password = process.env["PASSWORD"];
     const bucketName = process.env["BUCKET_NAME"];
-    const scopeName = process.env["SCOPE_NAMES"];
+    const scopeName = process.env["SCOPE_NAME"];
 
     try {
       const response = await fetch(
