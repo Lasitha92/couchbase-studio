@@ -19,8 +19,10 @@ declare global {
   }
 
   interface DocumentExecuterInput {
+    collection: string;
     documentId: string;
     whereClause: string;
+    limit: string;
   }
 
   interface Window {
@@ -39,6 +41,12 @@ declare global {
 }
 
 window.query1Result = null;
+window.documentExecuter1Input = {
+  collection: "",
+  documentId: "",
+  whereClause: "",
+  limit: "",
+};
 
 window.ipcRenderer.on(
   "collections-available",

@@ -26,12 +26,15 @@ const DocumentExecuter1: React.FC = () => {
     () => window.collections || []
   );
 
-  const [inputs, setInputs] = useState({
-    collection: "",
-    documentId: "",
-    whereClause: "",
-    limit: "",
-  });
+  const [inputs, setInputs] = useState(
+    () =>
+      window.documentExecuter1Input || {
+        collection: "",
+        documentId: "",
+        whereClause: "",
+        limit: "",
+      }
+  );
 
   useEffect(() => {
     const handleResultsUpdated = () => {
@@ -67,6 +70,12 @@ const DocumentExecuter1: React.FC = () => {
     };
   }, []);
 
+  const handleInputChange = (field: keyof typeof inputs, value: string) => {
+    const newInputs = { ...inputs, [field]: value };
+    setInputs(newInputs);
+    window.documentExecuter1Input = newInputs;
+  };
+
   return (
     <>
       <Grid container spacing={2}>
@@ -77,7 +86,7 @@ const DocumentExecuter1: React.FC = () => {
             disableClearable
             value={inputs.collection}
             onChange={(_event, newValue) => {
-              setInputs({ ...inputs, collection: newValue || "" });
+              handleInputChange("collection", newValue || "");
             }}
             renderInput={(params) => (
               <TextField {...params} label="Collection" variant="outlined" />
@@ -90,9 +99,7 @@ const DocumentExecuter1: React.FC = () => {
             variant="outlined"
             fullWidth
             value={inputs.documentId}
-            onChange={(e) =>
-              setInputs({ ...inputs, documentId: e.target.value })
-            }
+            onChange={(e) => handleInputChange("documentId", e.target.value)}
           ></TextField>
         </Grid>
         <Grid size={5}>
@@ -101,9 +108,7 @@ const DocumentExecuter1: React.FC = () => {
             variant="outlined"
             fullWidth
             value={inputs.whereClause}
-            onChange={(e) =>
-              setInputs({ ...inputs, whereClause: e.target.value })
-            }
+            onChange={(e) => handleInputChange("whereClause", e.target.value)}
           ></TextField>
         </Grid>
         <Grid size={1}>
@@ -113,7 +118,7 @@ const DocumentExecuter1: React.FC = () => {
             fullWidth
             type="number"
             value={inputs.limit}
-            onChange={(e) => setInputs({ ...inputs, limit: e.target.value })}
+            onChange={(e) => handleInputChange("limit", e.target.value)}
           ></TextField>
         </Grid>
       </Grid>
