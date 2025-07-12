@@ -89,6 +89,8 @@ export class CouchbaseConnector {
       }
 
       const data = await response.json();
+
+      console.log("Query result:", data);
       return data.results;
     } catch (error) {
       console.error("Error executing query:", error);

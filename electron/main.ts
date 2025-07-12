@@ -202,3 +202,27 @@ ipcMain.on("query-3-execute", async (_event, query) => {
     console.error("Error executing query 3:", error);
   }
 });
+
+ipcMain.on("document-1-execute", async (_event, inputs) => {
+  win?.webContents.send("system-message", "Executing query...");
+
+  try {
+    const query = `SELECT META() as meta, * FROM \`${inputs.collection}\` data LIMIT 5`;
+    const result = await CouchbaseConnector.executeQuery(query) as {meta: unknown, data: unknown}[];
+
+    const formattedData = result.map((d) => { return {
+      meta: d.meta,
+      data: d.data
+    }})
+
+    win?.webContents.send("document-1-result", formattedData);
+    win?.webContents.send(
+      "system-message",
+      "Document1 query executed successfully."
+    );
+  } catch (error) {
+    // @ts-expect-error error may not have a message property
+    win?.webContents.send("system-message", `Error: ${error.message}`);
+    console.error("Error executing document query:", error);
+  }
+});

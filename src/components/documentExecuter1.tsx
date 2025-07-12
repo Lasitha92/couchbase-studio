@@ -17,49 +17,27 @@ import React, { useEffect, useState } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { FaPencil } from "react-icons/fa6";
 
-function createData(id: string, document: string) {
-  return { id, document };
-}
-
-const rows = [
-  createData(
-    "62f670d7555d6960ba6506ad",
-    '{"partnerId":"611e221743d58628169177c7","status":"ORDER_DISPATCHED","brandId":"611e23e943d58628169177ca","menuId":"611e2ba1d849ff3af46176ba","updatedAt":"2025-07-08T06:13:24.333Z","type":"DELIVERY","currencyCode":"AED","userId":null,"note":"","numberOfOrder":"KMZCZ","businessDay":null,"campaigns":null,"channel":null,"closedOnPosAppId":null,"customer":{"id":"685bb1c302d623d17e3d631a","name":"SalindaKarunarathna","email":"","phone":"+94712201315","landmarkHint":"","addressHint":"rr,rr","location":{"latitude":"25.180578","longitude":"55.271028"}},"delivery":{"location":{"latitude":"25.180578","longitude":"55.271028","address":"rr,rr","area":"","city":"","street":""},"notes":"rr","deliveryMode":"","receiverName":"SalindaKarunarathna","receiverMobileNumber":"+94712201315"},"fulfillmentType":"DELIVERY_BY_RESTAURANT","items":["62f670d7c29ead3903b54945"],"kitchenInfo":{"id":"611e24b343d58628169177cb","countryCode":"ARE","tax":{"sourceId":"5f7ac8508088545d96024088","code":"VAT","amount":5,"displayName":"VAT"}},"numberOfGuests":null,"originalOrderId":null,"payment":{"status":"UNPAID","taxes":[{"sourceId":"5f7ac8508088545d96024088","code":"VAT","amount":5,"displayName":"VAT","value":552}],"discounts":[],"invoiceNumber":"93","paymentSource":null,"receiptMode":"single","bills":[{"status":"UNPAID","authCode":null,"method":"CASH","otherCharges":null,"change":null,"loyalty":null,"cardType":null,"charges":{"taxes":[{"sourceId":"5f7ac8508088545d96024088","code":"VAT","amount":5,"displayName":"VAT","value":552}],"tips":null,"total":{"amount":11000,"currencyCode":"AED"},"deliveryFee":{"amount":600,"currencyCode":"AED"},"subTotal":{"amount":11000,"currencyCode":"AED"},"extraCharges":null},"online":{"amount":0,"currencyCode":"AED"},"invoiceId":null,"cash":{"amount":11600,"currencyCode":"AED"},"card":{"amount":0,"currencyCode":"AED"},"billItems":[{"part":"1.0","orderItem":"62f670d7c29ead3903b54945"}],"cardPaymentSource":null}]},"placedAt":"2025-07-08T06:13:24.229Z","registerId":null,"scheduledAt":null,"source":{"name":"ONLINE_ORDER","sourceId":"web-order","gtInternalId":"875399525473198080","displayName":"Onlineorder","createdAt":"2022-08-12T15:25:10.801Z","uniqueOrderId":"62f670d6555d6960ba6506ac"},"statusInfo":{"note":null,"reason":{"id":"","name":{"text":"","translations":[]}},"isPrepared":null},"sync":null,"tableInfo":null,"userClosedBy":null,"voidSequenceNumber":""}'
-  ),
-  createData(
-    "62f670d7555d6960ba6506ad",
-    '{"partnerId":"611e221743d58628169177c7","status":"ORDER_DISPATCHED","brandId":"611e23e943d58628169177ca","menuId":"611e2ba1d849ff3af46176ba","updatedAt":"2025-07-08T06:13:24.333Z","type":"DELIVERY","currencyCode":"AED","userId":null,"note":"","numberOfOrder":"KMZCZ","businessDay":null,"campaigns":null,"channel":null,"closedOnPosAppId":null,"customer":{"id":"685bb1c302d623d17e3d631a","name":"SalindaKarunarathna","email":"","phone":"+94712201315","landmarkHint":"","addressHint":"rr,rr","location":{"latitude":"25.180578","longitude":"55.271028"}},"delivery":{"location":{"latitude":"25.180578","longitude":"55.271028","address":"rr,rr","area":"","city":"","street":""},"notes":"rr","deliveryMode":"","receiverName":"SalindaKarunarathna","receiverMobileNumber":"+94712201315"},"fulfillmentType":"DELIVERY_BY_RESTAURANT","items":["62f670d7c29ead3903b54945"],"kitchenInfo":{"id":"611e24b343d58628169177cb","countryCode":"ARE","tax":{"sourceId":"5f7ac8508088545d96024088","code":"VAT","amount":5,"displayName":"VAT"}},"numberOfGuests":null,"originalOrderId":null,"payment":{"status":"UNPAID","taxes":[{"sourceId":"5f7ac8508088545d96024088","code":"VAT","amount":5,"displayName":"VAT","value":552}],"discounts":[],"invoiceNumber":"93","paymentSource":null,"receiptMode":"single","bills":[{"status":"UNPAID","authCode":null,"method":"CASH","otherCharges":null,"change":null,"loyalty":null,"cardType":null,"charges":{"taxes":[{"sourceId":"5f7ac8508088545d96024088","code":"VAT","amount":5,"displayName":"VAT","value":552}],"tips":null,"total":{"amount":11000,"currencyCode":"AED"},"deliveryFee":{"amount":600,"currencyCode":"AED"},"subTotal":{"amount":11000,"currencyCode":"AED"},"extraCharges":null},"online":{"amount":0,"currencyCode":"AED"},"invoiceId":null,"cash":{"amount":11600,"currencyCode":"AED"},"card":{"amount":0,"currencyCode":"AED"},"billItems":[{"part":"1.0","orderItem":"62f670d7c29ead3903b54945"}],"cardPaymentSource":null}]},"placedAt":"2025-07-08T06:13:24.229Z","registerId":null,"scheduledAt":null,"source":{"name":"ONLINE_ORDER","sourceId":"web-order","gtInternalId":"875399525473198080","displayName":"Onlineorder","createdAt":"2022-08-12T15:25:10.801Z","uniqueOrderId":"62f670d6555d6960ba6506ac"},"statusInfo":{"note":null,"reason":{"id":"","name":{"text":"","translations":[]}},"isPrepared":null},"sync":null,"tableInfo":null,"userClosedBy":null,"voidSequenceNumber":""}'
-  ),
-  createData(
-    "62f670d7555d6960ba6506ad",
-    '{"partnerId":"611e221743d58628169177c7","status":"ORDER_DISPATCHED","brandId":"611e23e943d58628169177ca","menuId":"611e2ba1d849ff3af46176ba","updatedAt":"2025-07-08T06:13:24.333Z","type":"DELIVERY","currencyCode":"AED","userId":null,"note":"","numberOfOrder":"KMZCZ","businessDay":null,"campaigns":null,"channel":null,"closedOnPosAppId":null,"customer":{"id":"685bb1c302d623d17e3d631a","name":"SalindaKarunarathna","email":"","phone":"+94712201315","landmarkHint":"","addressHint":"rr,rr","location":{"latitude":"25.180578","longitude":"55.271028"}},"delivery":{"location":{"latitude":"25.180578","longitude":"55.271028","address":"rr,rr","area":"","city":"","street":""},"notes":"rr","deliveryMode":"","receiverName":"SalindaKarunarathna","receiverMobileNumber":"+94712201315"},"fulfillmentType":"DELIVERY_BY_RESTAURANT","items":["62f670d7c29ead3903b54945"],"kitchenInfo":{"id":"611e24b343d58628169177cb","countryCode":"ARE","tax":{"sourceId":"5f7ac8508088545d96024088","code":"VAT","amount":5,"displayName":"VAT"}},"numberOfGuests":null,"originalOrderId":null,"payment":{"status":"UNPAID","taxes":[{"sourceId":"5f7ac8508088545d96024088","code":"VAT","amount":5,"displayName":"VAT","value":552}],"discounts":[],"invoiceNumber":"93","paymentSource":null,"receiptMode":"single","bills":[{"status":"UNPAID","authCode":null,"method":"CASH","otherCharges":null,"change":null,"loyalty":null,"cardType":null,"charges":{"taxes":[{"sourceId":"5f7ac8508088545d96024088","code":"VAT","amount":5,"displayName":"VAT","value":552}],"tips":null,"total":{"amount":11000,"currencyCode":"AED"},"deliveryFee":{"amount":600,"currencyCode":"AED"},"subTotal":{"amount":11000,"currencyCode":"AED"},"extraCharges":null},"online":{"amount":0,"currencyCode":"AED"},"invoiceId":null,"cash":{"amount":11600,"currencyCode":"AED"},"card":{"amount":0,"currencyCode":"AED"},"billItems":[{"part":"1.0","orderItem":"62f670d7c29ead3903b54945"}],"cardPaymentSource":null}]},"placedAt":"2025-07-08T06:13:24.229Z","registerId":null,"scheduledAt":null,"source":{"name":"ONLINE_ORDER","sourceId":"web-order","gtInternalId":"875399525473198080","displayName":"Onlineorder","createdAt":"2022-08-12T15:25:10.801Z","uniqueOrderId":"62f670d6555d6960ba6506ac"},"statusInfo":{"note":null,"reason":{"id":"","name":{"text":"","translations":[]}},"isPrepared":null},"sync":null,"tableInfo":null,"userClosedBy":null,"voidSequenceNumber":""}'
-  ),
-  createData(
-    "62f670d7555d6960ba6506ad",
-    '{"partnerId":"611e221743d58628169177c7","status":"ORDER_DISPATCHED","brandId":"611e23e943d58628169177ca","menuId":"611e2ba1d849ff3af46176ba","updatedAt":"2025-07-08T06:13:24.333Z","type":"DELIVERY","currencyCode":"AED","userId":null,"note":"","numberOfOrder":"KMZCZ","businessDay":null,"campaigns":null,"channel":null,"closedOnPosAppId":null,"customer":{"id":"685bb1c302d623d17e3d631a","name":"SalindaKarunarathna","email":"","phone":"+94712201315","landmarkHint":"","addressHint":"rr,rr","location":{"latitude":"25.180578","longitude":"55.271028"}},"delivery":{"location":{"latitude":"25.180578","longitude":"55.271028","address":"rr,rr","area":"","city":"","street":""},"notes":"rr","deliveryMode":"","receiverName":"SalindaKarunarathna","receiverMobileNumber":"+94712201315"},"fulfillmentType":"DELIVERY_BY_RESTAURANT","items":["62f670d7c29ead3903b54945"],"kitchenInfo":{"id":"611e24b343d58628169177cb","countryCode":"ARE","tax":{"sourceId":"5f7ac8508088545d96024088","code":"VAT","amount":5,"displayName":"VAT"}},"numberOfGuests":null,"originalOrderId":null,"payment":{"status":"UNPAID","taxes":[{"sourceId":"5f7ac8508088545d96024088","code":"VAT","amount":5,"displayName":"VAT","value":552}],"discounts":[],"invoiceNumber":"93","paymentSource":null,"receiptMode":"single","bills":[{"status":"UNPAID","authCode":null,"method":"CASH","otherCharges":null,"change":null,"loyalty":null,"cardType":null,"charges":{"taxes":[{"sourceId":"5f7ac8508088545d96024088","code":"VAT","amount":5,"displayName":"VAT","value":552}],"tips":null,"total":{"amount":11000,"currencyCode":"AED"},"deliveryFee":{"amount":600,"currencyCode":"AED"},"subTotal":{"amount":11000,"currencyCode":"AED"},"extraCharges":null},"online":{"amount":0,"currencyCode":"AED"},"invoiceId":null,"cash":{"amount":11600,"currencyCode":"AED"},"card":{"amount":0,"currencyCode":"AED"},"billItems":[{"part":"1.0","orderItem":"62f670d7c29ead3903b54945"}],"cardPaymentSource":null}]},"placedAt":"2025-07-08T06:13:24.229Z","registerId":null,"scheduledAt":null,"source":{"name":"ONLINE_ORDER","sourceId":"web-order","gtInternalId":"875399525473198080","displayName":"Onlineorder","createdAt":"2022-08-12T15:25:10.801Z","uniqueOrderId":"62f670d6555d6960ba6506ac"},"statusInfo":{"note":null,"reason":{"id":"","name":{"text":"","translations":[]}},"isPrepared":null},"sync":null,"tableInfo":null,"userClosedBy":null,"voidSequenceNumber":""}'
-  ),
-];
-
 const DocumentExecuter1: React.FC = () => {
-  const [queryResult, setQueryResult] = useState<unknown>(
-    () => window.query1Result
-  );
-
-  const [inputs, setInputs] = useState(
-    () => window.documentExecuter1Input || null
-  );
+  const [queryResult, setQueryResult] = useState<
+    DocumentExecuterResult[] | null
+  >(() => window.document1Result);
 
   const [collections, setCollections] = useState<string[]>(
     () => window.collections || []
   );
 
-  const [selectedCollection, setSelectedCollection] = useState<string>("");
+  const [inputs, setInputs] = useState({
+    collection: "",
+    documentId: "",
+    whereClause: "",
+    limit: "",
+  });
 
   useEffect(() => {
-    const handleMessageUpdate = () => {
-      const message = window.query1Result;
-      if (message) {
-        setQueryResult(message);
+    const handleResultsUpdated = () => {
+      const result = window.document1Result;
+      if (result) {
+        setQueryResult(result);
       }
     };
 
@@ -67,23 +45,20 @@ const DocumentExecuter1: React.FC = () => {
       const collections = window.collections || [];
       if (collections.length > 0) {
         setCollections(collections);
-        setSelectedCollection(collections[0]);
+        setInputs((i) => ({ ...i, collection: collections[0] }));
       }
     };
 
-    window.addEventListener("document-result-1-updated", handleMessageUpdate);
+    window.addEventListener("document-result-1-updated", handleResultsUpdated);
     window.addEventListener(
       "available-collections-updated",
       handleCollectionsUpdate
     );
 
-    setInputs(null);
-    console.log(queryResult);
-
     return () => {
       window.removeEventListener(
         "document-result-1-updated",
-        handleMessageUpdate
+        handleResultsUpdated
       );
       window.removeEventListener(
         "available-collections-updated",
@@ -100,9 +75,9 @@ const DocumentExecuter1: React.FC = () => {
             options={collections}
             id="collection-selector"
             disableClearable
-            value={selectedCollection}
+            value={inputs.collection}
             onChange={(_event, newValue) => {
-              setSelectedCollection(newValue || "");
+              setInputs({ ...inputs, collection: newValue || "" });
             }}
             renderInput={(params) => (
               <TextField {...params} label="Collection" variant="outlined" />
@@ -114,6 +89,10 @@ const DocumentExecuter1: React.FC = () => {
             label="Document ID"
             variant="outlined"
             fullWidth
+            value={inputs.documentId}
+            onChange={(e) =>
+              setInputs({ ...inputs, documentId: e.target.value })
+            }
           ></TextField>
         </Grid>
         <Grid size={5}>
@@ -121,6 +100,10 @@ const DocumentExecuter1: React.FC = () => {
             label="Where clause"
             variant="outlined"
             fullWidth
+            value={inputs.whereClause}
+            onChange={(e) =>
+              setInputs({ ...inputs, whereClause: e.target.value })
+            }
           ></TextField>
         </Grid>
         <Grid size={1}>
@@ -129,6 +112,8 @@ const DocumentExecuter1: React.FC = () => {
             variant="outlined"
             fullWidth
             type="number"
+            value={inputs.limit}
+            onChange={(e) => setInputs({ ...inputs, limit: e.target.value })}
           ></TextField>
         </Grid>
       </Grid>
@@ -142,7 +127,9 @@ const DocumentExecuter1: React.FC = () => {
       >
         <Button
           variant="contained"
-          onClick={() => window.ipcRenderer.send("document-1-execute", inputs)}
+          onClick={() => {
+            window.ipcRenderer.send("document-1-execute", inputs);
+          }}
         >
           Execute
         </Button>
@@ -158,7 +145,7 @@ const DocumentExecuter1: React.FC = () => {
           alignItems: "left",
         }}
       >
-        {rows ? (
+        {queryResult ? (
           <TableContainer component={Paper}>
             <Table aria-label="simple table">
               <TableHead>
@@ -169,9 +156,9 @@ const DocumentExecuter1: React.FC = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {queryResult.map((row) => (
                   <TableRow
-                    key={row.id}
+                    key={row.meta.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
@@ -187,9 +174,9 @@ const DocumentExecuter1: React.FC = () => {
                         </Button>
                       </ButtonGroup>
                     </TableCell>
-                    <TableCell align="left">{row.id}</TableCell>
+                    <TableCell align="left">{row.meta.id}</TableCell>
                     <TableCell align="left">
-                      {row.document.slice(0, 300)}
+                      {JSON.stringify(row.data).slice(0, 300)}
                     </TableCell>
                   </TableRow>
                 ))}

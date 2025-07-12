@@ -13,6 +13,11 @@ declare global {
     scopeName: string;
   }
 
+  interface DocumentExecuterResult {
+    meta: { id: string };
+    data: unknown;
+  }
+
   interface DocumentExecuterInput {
     documentId: string;
     whereClause: string;
@@ -22,7 +27,7 @@ declare global {
     appConfig: AppConfig | null;
     collections: string[];
     documentExecuter1Input: DocumentExecuterInput | null;
-    documentExecuter1Result: unknown | null;
+    document1Result: DocumentExecuterResult[] | null;
     query1Text: string;
     query2Text: string;
     query3Text: string;
@@ -35,15 +40,21 @@ declare global {
 
 window.query1Result = null;
 
-window.ipcRenderer.on("collections-available", (_event: unknown, collections: string[]) => {
-  window.collections = collections;
-  window.dispatchEvent(new CustomEvent("available-collections-updated"));
-});
+window.ipcRenderer.on(
+  "collections-available",
+  (_event: unknown, collections: string[]) => {
+    window.collections = collections;
+    window.dispatchEvent(new CustomEvent("available-collections-updated"));
+  }
+);
 
-window.ipcRenderer.on("document-1-result", (_event: unknown, message: unknown) => {
-  window.documentExecuter1Result = message;
-  window.dispatchEvent(new CustomEvent("document-result-1-updated"));
-});
+window.ipcRenderer.on(
+  "document-1-result",
+  (_event: unknown, data: DocumentExecuterResult[]) => {
+    window.document1Result = data;
+    window.dispatchEvent(new CustomEvent("document-result-1-updated"));
+  }
+);
 
 window.ipcRenderer.on("query-1-result", (_event: unknown, message: unknown) => {
   window.query1Result = message;
