@@ -74,6 +74,8 @@ function createWindow() {
   win = new BrowserWindow({
     title: "Couchbase Studio",
     icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
+    width: 1000,
+    height: 600,
     webPreferences: {
       preload: path.join(__dirname, "preload.mjs"),
     },
@@ -148,8 +150,8 @@ ipcMain.on("connect-to-couchbase", async (_event, formData) => {
     const collections = await CouchbaseConnector.isConnectionValid();
 
     if (collections) {
-    win?.webContents.send("system-message", "Connection successful!");
-  } else {
+      win?.webContents.send("system-message", "Connection successful!");
+    } else {
       win?.webContents.send("system-message", "Connection failed!");
     }
   } catch (error) {
