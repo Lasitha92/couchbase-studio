@@ -207,15 +207,14 @@ ipcMain.on("document-1-execute", async (_event, inputs) => {
   win?.webContents.send("system-message", "Executing query...");
 
   try {
-    const query = `SELECT META() as meta, * FROM \`${inputs.collection}\` data LIMIT 5`;
-    const result = await CouchbaseConnector.executeQuery(query) as {meta: unknown, data: unknown}[];
+    const result = await CouchbaseConnector.executeDocumentQuery(
+      inputs.collection,
+      inputs.documentId,
+      inputs.whereClause,
+      inputs.limit
+    );
 
-    const formattedData = result.map((d) => { return {
-      meta: d.meta,
-      data: d.data
-    }})
-
-    win?.webContents.send("document-1-result", formattedData);
+    win?.webContents.send("document-1-result", result);
     win?.webContents.send(
       "system-message",
       "Document1 query executed successfully."

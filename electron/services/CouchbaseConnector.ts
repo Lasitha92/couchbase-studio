@@ -97,4 +97,71 @@ export class CouchbaseConnector {
       throw error;
     }
   }
+
+  public static async executeDocumentQuery(
+    collectionName: string,
+    documentId: string,
+    whereClause: string,
+    limit: number
+  ): Promise<{ meta: unknown; data: unknown }[]> {
+    const connectionString = process.env["SERVER_URL"];
+    const username = process.env["USERNAME"];
+    const password = process.env["PASSWORD"];
+    const bucketName = process.env["BUCKET_NAME"];
+    const scopeName = process.env["SCOPE_NAME"];
+
+    let query = `SELECT META() as meta, * FROM \`${collectionName}\` as data`;
+
+    if (documentId) {
+      query += ` WHERE META().id = "${documentId}"`;
+    } else if (whereClause) {
+      query += ` WHERE ${whereClause}`;
+    }
+
+    if (limit) {
+      query += ` LIMIT ${limit}`;
+    } else {
+      query += ` LIMIT 10`;
+    }
+
+    console.log("Executing query:", query);
+
+    try {
+      const response = await fetch(
+        `http://${connectionString}:8093/query/service`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Basic " + btoa(`${username}:${password}`),
+          },
+          body: JSON.stringify({
+            statement: query,
+            query_context: `default:${bucketName}.${scopeName}`,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        console.error(response);
+        throw new Error(`Query failed with status ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      const formattedData = data.results.map(
+        (d: { meta: unknown; data: unknown }) => {
+          return {
+            meta: d.meta,
+            data: d.data,
+          };
+        }
+      );
+      console.log("Query result:", formattedData);
+      return formattedData;
+    } catch (error) {
+      console.error("Error executing query:", error);
+      throw error;
+    }
+  }
 }
