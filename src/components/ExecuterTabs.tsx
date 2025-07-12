@@ -3,7 +3,7 @@ import { useState } from "react";
 import QueryExecuter1 from "./QueryExecuter1";
 import QueryExecuter2 from "./QueryExecuter2";
 import QueryExecuter3 from "./QueryExecuter3";
-import DocumentExecuter1 from "./documentExecuter1";
+import DocumentExecuter from "./DocumentExecuter";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -56,7 +56,7 @@ const ExecuterTabs = () => {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <DocumentExecuter1 />
+        <DocumentExecuter />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <QueryExecuter1 />

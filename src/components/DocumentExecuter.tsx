@@ -2,7 +2,7 @@ import { Autocomplete, Box, Button, Grid, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import DocumentExecuterTable from "./DocumentExecuterTable";
 
-const DocumentExecuter1: React.FC = () => {
+const DocumentExecuter: React.FC = () => {
   const [queryResult, setQueryResult] = useState<
     DocumentExecuterResult[] | null
   >(() => window.document1Result);
@@ -141,4 +141,4 @@ const DocumentExecuter1: React.FC = () => {
   );
 };
 
-export default DocumentExecuter1;
+export default DocumentExecuter;
