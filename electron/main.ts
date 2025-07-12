@@ -151,6 +151,7 @@ ipcMain.on("connect-to-couchbase", async (_event, formData) => {
 
     if (collections) {
       win?.webContents.send("system-message", "Connection successful!");
+      win?.webContents.send("collections-available", collections);
     } else {
       win?.webContents.send("system-message", "Connection failed!");
     }

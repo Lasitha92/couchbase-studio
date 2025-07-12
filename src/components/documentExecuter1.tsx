@@ -40,8 +40,6 @@ const rows = [
   ),
 ];
 
-const collections = ["orders", "customers", "menus", "brands", "partners"];
-
 const DocumentExecuter1: React.FC = () => {
   const [queryResult, setQueryResult] = useState<unknown>(
     () => window.query1Result
@@ -51,9 +49,11 @@ const DocumentExecuter1: React.FC = () => {
     () => window.documentExecuter1Input || null
   );
 
-  const [selectedCollection, setSelectedCollection] = useState<string>(
-    collections[0]
+  const [collections, setCollections] = useState<string[]>(
+    () => window.collections || []
   );
+
+  const [selectedCollection, setSelectedCollection] = useState<string>("");
 
   useEffect(() => {
     const handleMessageUpdate = () => {
@@ -63,15 +63,31 @@ const DocumentExecuter1: React.FC = () => {
       }
     };
 
+    const handleCollectionsUpdate = () => {
+      const collections = window.collections || [];
+      if (collections.length > 0) {
+        setCollections(collections);
+        setSelectedCollection(collections[0]);
+      }
+    };
+
     window.addEventListener("document-result-1-updated", handleMessageUpdate);
+    window.addEventListener(
+      "available-collections-updated",
+      handleCollectionsUpdate
+    );
 
     setInputs(null);
-    console.log(queryResult)
+    console.log(queryResult);
 
     return () => {
       window.removeEventListener(
         "document-result-1-updated",
         handleMessageUpdate
+      );
+      window.removeEventListener(
+        "available-collections-updated",
+        handleCollectionsUpdate
       );
     };
   }, []);
@@ -79,14 +95,14 @@ const DocumentExecuter1: React.FC = () => {
   return (
     <>
       <Grid container spacing={2}>
-        <Grid size={2}>
+        <Grid size={3}>
           <Autocomplete
             options={collections}
             id="collection-selector"
             disableClearable
             value={selectedCollection}
             onChange={(_event, newValue) => {
-              setSelectedCollection(newValue || collections[0]);
+              setSelectedCollection(newValue || "");
             }}
             renderInput={(params) => (
               <TextField {...params} label="Collection" variant="outlined" />
@@ -107,7 +123,7 @@ const DocumentExecuter1: React.FC = () => {
             fullWidth
           ></TextField>
         </Grid>
-        <Grid size={2}>
+        <Grid size={1}>
           <TextField
             label="Limit"
             variant="outlined"
