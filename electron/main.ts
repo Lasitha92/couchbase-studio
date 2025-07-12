@@ -144,11 +144,16 @@ ipcMain.on("connect-to-couchbase", async (_event, formData) => {
     "Checking the connection please wait..."
   );
 
-  const isConnectionValid = await CouchbaseConnector.isConnectionValid();
+  try {
+    const collections = await CouchbaseConnector.isConnectionValid();
 
-  if (isConnectionValid) {
+    if (collections) {
     win?.webContents.send("system-message", "Connection successful!");
   } else {
+      win?.webContents.send("system-message", "Connection failed!");
+    }
+  } catch (error) {
+    console.error("Connection error:", error);
     win?.webContents.send("system-message", "Connection failed!");
   }
 });
