@@ -135,7 +135,10 @@ const DocumentExecuter: React.FC = () => {
           alignItems: "left",
         }}
       >
-        <DocumentExecuterTable queryResult={queryResult} />
+        <DocumentExecuterTable
+          queryResult={queryResult}
+          collection={inputs.collection}
+        />
       </Box>
     </>
   );
