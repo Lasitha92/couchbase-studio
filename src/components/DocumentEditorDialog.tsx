@@ -79,8 +79,12 @@ const DocumentEditorDialog: React.FC<DocumentEditorDialogProps> = ({
       slotProps={{
         paper: {
           sx: {
-            height: "80vh",
-            maxHeight: "80vh",
+            minWidth: "400px",
+            minHeight: "300px",
+            maxWidth: "90vw",
+            maxHeight: "90vh",
+            resize: "both",
+            overflow: "auto",
           },
         },
       }}
@@ -93,9 +97,16 @@ const DocumentEditorDialog: React.FC<DocumentEditorDialogProps> = ({
           Collection: {selectedDocument?.collection}
         </Typography>
       </DialogTitle>
-      <DialogContent sx={{ flex: 1, overflow: "auto" }}>
+      <DialogContent
+        sx={{
+          flex: 1,
+          overflow: "auto",
+          height: "100%",
+          boxSizing: "border-box",
+        }}
+      >
         {selectedDocument?.documentData && (
-          <Box sx={{ mt: 2 }}>
+          <Box sx={{ mt: 1 }}>
             <TextField
               multiline
               fullWidth
@@ -103,16 +114,12 @@ const DocumentEditorDialog: React.FC<DocumentEditorDialogProps> = ({
               onChange={handleContentChange}
               error={!isValidJson}
               helperText={!isValidJson ? "Invalid JSON format" : ""}
-              sx={{
-                "& .MuiInputBase-root": {
-                  fontFamily: "monospace",
-                  fontSize: "14px",
-                },
-              }}
-              InputProps={{
-                style: {
-                  fontFamily: "monospace",
-                  fontSize: "14px",
+              slotProps={{
+                input: {
+                  style: {
+                    fontFamily: "monospace",
+                    fontSize: "12px",
+                  },
                 },
               }}
             />
