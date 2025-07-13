@@ -51,6 +51,7 @@ const DocumentExecuterTable: React.FC<DocumentExecuterTableProps> = ({
       documentId,
       updatedData,
       collection,
+      documentExecuterInputs: window.documentExecuter1Input,
     });
   };
 

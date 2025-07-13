@@ -228,7 +228,10 @@ ipcMain.on("document-1-execute", async (_event, inputs) => {
 
 ipcMain.on(
   "document-save",
-  async (_event, { collection, documentId, updatedData }) => {
+  async (
+    _event,
+    { collection, documentId, updatedData, documentExecuterInputs }
+  ) => {
     win?.webContents.send("system-message", "Saving document...");
     try {
       const result = await CouchbaseConnector.saveDocument(
@@ -238,7 +241,37 @@ ipcMain.on(
       );
 
       console.log("Result: ", result);
-      win?.webContents.send("system-message", "Document saved successfully.");
+      win?.webContents.send(
+        "system-message",
+        "Document saved successfully. Loading updated data..."
+      );
+
+      // If documentExecuterInputs are provided, re-execute the document query and send updated result
+      if (documentExecuterInputs) {
+        try {
+          const updatedResult = await CouchbaseConnector.executeDocumentQuery(
+            documentExecuterInputs.collection,
+            documentExecuterInputs.documentId,
+            documentExecuterInputs.whereClause,
+            documentExecuterInputs.limit
+          );
+          win?.webContents.send("document-1-result", updatedResult);
+          win?.webContents.send(
+            "system-message",
+            "Documents reloaded successfully"
+          );
+        } catch (queryError) {
+          const errorMsg =
+            queryError instanceof Error
+              ? queryError.message
+              : String(queryError);
+          win?.webContents.send(
+            "system-message",
+            `Error updating document result: ${errorMsg}`
+          );
+          console.error("Error updating document result:", queryError);
+        }
+      }
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : String(error);
       win?.webContents.send(
