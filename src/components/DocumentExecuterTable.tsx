@@ -8,27 +8,17 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Typography,
-  Box,
 } from "@mui/material";
 import React, { useState } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { FaPencil } from "react-icons/fa6";
-import JsonView from "@uiw/react-json-view";
+import DocumentEditorDialog, {
+  DocumentModalData,
+} from "./DocumentEditorDialog";
 
 interface DocumentExecuterTableProps {
   queryResult: DocumentExecuterResult[] | null;
   collection?: string;
-}
-
-interface DocumentModalData {
-  documentId: string;
-  documentData: unknown;
-  collection: string;
 }
 
 const DocumentExecuterTable: React.FC<DocumentExecuterTableProps> = ({
@@ -42,7 +32,7 @@ const DocumentExecuterTable: React.FC<DocumentExecuterTableProps> = ({
   const handleOpenModal = (documentId: string, documentData: unknown) => {
     setSelectedDocument({
       documentId,
-      documentData,
+      documentData: documentData as Record<string, unknown>,
       collection,
     });
     setModalOpen(true);
@@ -102,43 +92,11 @@ const DocumentExecuterTable: React.FC<DocumentExecuterTableProps> = ({
       </TableContainer>
 
       {/* Document Data Modal */}
-      <Dialog
+      <DocumentEditorDialog
         open={modalOpen}
         onClose={handleCloseModal}
-        maxWidth="md"
-        fullWidth
-        PaperProps={{
-          sx: {
-            height: "80vh",
-            maxHeight: "80vh",
-          },
-        }}
-      >
-        <DialogTitle>
-          <Typography variant="h6">
-            Document: {selectedDocument?.documentId}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Collection: {selectedDocument?.collection}
-          </Typography>
-        </DialogTitle>
-        <DialogContent sx={{ flex: 1, overflow: "auto" }}>
-          {selectedDocument && (
-            <Box sx={{ mt: 2 }}>
-              <JsonView
-                value={selectedDocument.documentData as object}
-                displayDataTypes={false}
-                style={{ backgroundColor: "transparent" }}
-              />
-            </Box>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseModal} variant="outlined">
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
+        selectedDocument={selectedDocument}
+      />
     </>
   );
 };
