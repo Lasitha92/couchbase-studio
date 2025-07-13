@@ -18,6 +18,16 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
 
 let win: BrowserWindow | null;
 
+// Read version from package.json
+const packageJsonPath = path.join(__dirname, "..", "package.json");
+let appVersion = "Unknown";
+try {
+  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
+  appVersion = packageJson.version || "Unknown";
+} catch (err) {
+  console.error("Failed to read version from package.json:", err);
+}
+
 const customMenu = [
   {
     label: "File",
@@ -56,7 +66,7 @@ const customMenu = [
                <head><title>About Couchbase Studio</title></head>
                <body style="font-family: Arial, sans-serif; padding: 20px;">
                  <h2>Couchbase Studio</h2>
-                 <p>Version: 1.0.0</p>
+                 <p>Version: ${appVersion}</p>
                  <p>A simple desktop application for querying Couchbase databases.</p>
                  <hr style="margin: 20px 0;">
                  <p><strong>Developer:</strong> Lasitha Bandara</p>
