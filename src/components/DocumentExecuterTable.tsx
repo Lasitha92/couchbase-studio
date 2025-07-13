@@ -88,8 +88,8 @@ const DocumentExecuterTable: React.FC<DocumentExecuterTableProps> = ({
                     >
                       <FaPencil />
                     </Button>
-                    <Button>
-                      <FaRegTrashAlt />{" "}
+                    <Button disabled >
+                      <FaRegTrashAlt />
                     </Button>
                   </ButtonGroup>
                 </TableCell>
