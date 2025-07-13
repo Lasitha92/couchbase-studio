@@ -6,9 +6,9 @@ import {
   Typography,
   Box,
   Button,
+  TextField,
 } from "@mui/material";
-import React from "react";
-import JsonView from "@uiw/react-json-view";
+import React, { useState, useEffect } from "react";
 
 export interface DocumentModalData {
   documentId: string;
@@ -20,17 +20,60 @@ interface DocumentEditorDialogProps {
   open: boolean;
   onClose: () => void;
   selectedDocument: DocumentModalData | null;
+  onSave?: (documentId: string, updatedData: Record<string, unknown>) => void;
 }
 
 const DocumentEditorDialog: React.FC<DocumentEditorDialogProps> = ({
   open,
   onClose,
   selectedDocument,
+  onSave,
 }) => {
+  const [editedContent, setEditedContent] = useState<string>("");
+  const [isValidJson, setIsValidJson] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (selectedDocument?.documentData) {
+      setEditedContent(JSON.stringify(selectedDocument.documentData, null, 2));
+      setIsValidJson(true);
+    }
+  }, [selectedDocument]);
+
+  const handleContentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newContent = event.target.value;
+    setEditedContent(newContent);
+
+    // Validate JSON
+    try {
+      JSON.parse(newContent);
+      setIsValidJson(true);
+    } catch (error) {
+      setIsValidJson(false);
+    }
+  };
+
+  const handleSave = () => {
+    if (!isValidJson || !selectedDocument || !onSave) return;
+
+    try {
+      const parsedData = JSON.parse(editedContent);
+      onSave(selectedDocument.documentId, parsedData);
+      onClose();
+    } catch (error) {
+      console.error("Failed to save document:", error);
+    }
+  };
+
+  const handleClose = () => {
+    setEditedContent("");
+    setIsValidJson(true);
+    onClose();
+  };
+
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       maxWidth="md"
       fullWidth
       slotProps={{
@@ -53,17 +96,39 @@ const DocumentEditorDialog: React.FC<DocumentEditorDialogProps> = ({
       <DialogContent sx={{ flex: 1, overflow: "auto" }}>
         {selectedDocument?.documentData && (
           <Box sx={{ mt: 2 }}>
-            <JsonView
-              value={selectedDocument.documentData}
-              displayDataTypes={false}
-              style={{ backgroundColor: "transparent" }}
+            <TextField
+              multiline
+              fullWidth
+              value={editedContent}
+              onChange={handleContentChange}
+              error={!isValidJson}
+              helperText={!isValidJson ? "Invalid JSON format" : ""}
+              sx={{
+                "& .MuiInputBase-root": {
+                  fontFamily: "monospace",
+                  fontSize: "14px",
+                },
+              }}
+              InputProps={{
+                style: {
+                  fontFamily: "monospace",
+                  fontSize: "14px",
+                },
+              }}
             />
           </Box>
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} variant="outlined">
-          Close
+        <Button onClick={handleClose} variant="outlined">
+          Cancel
+        </Button>
+        <Button
+          onClick={handleSave}
+          variant="contained"
+          disabled={!isValidJson || !onSave}
+        >
+          Save
         </Button>
       </DialogActions>
     </Dialog>

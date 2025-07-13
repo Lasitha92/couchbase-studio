@@ -43,6 +43,13 @@ const DocumentExecuterTable: React.FC<DocumentExecuterTableProps> = ({
     setSelectedDocument(null);
   };
 
+  const handleOnSaveDocument = (
+    documentId: string,
+    updatedData: Record<string, unknown>
+  ) => {
+    console.log("Saving document:", documentId, updatedData);
+  };
+
   if (!queryResult) {
     return <div>This is executer 1. Your result will be displayed here</div>;
   }
@@ -91,11 +98,11 @@ const DocumentExecuterTable: React.FC<DocumentExecuterTableProps> = ({
         </Table>
       </TableContainer>
 
-      {/* Document Data Modal */}
       <DocumentEditorDialog
         open={modalOpen}
         onClose={handleCloseModal}
         selectedDocument={selectedDocument}
+        onSave={handleOnSaveDocument}
       />
     </>
   );
