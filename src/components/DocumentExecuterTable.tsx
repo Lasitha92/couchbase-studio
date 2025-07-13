@@ -47,7 +47,11 @@ const DocumentExecuterTable: React.FC<DocumentExecuterTableProps> = ({
     documentId: string,
     updatedData: Record<string, unknown>
   ) => {
-    console.log("Saving document:", documentId, updatedData);
+    window.ipcRenderer.send("document-save", {
+      documentId,
+      updatedData,
+      collection,
+    });
   };
 
   if (!queryResult) {

@@ -225,3 +225,27 @@ ipcMain.on("document-1-execute", async (_event, inputs) => {
     console.error("Error executing document query:", error);
   }
 });
+
+ipcMain.on(
+  "document-save",
+  async (_event, { collection, documentId, updatedData }) => {
+    win?.webContents.send("system-message", "Saving document...");
+    try {
+      const result = await CouchbaseConnector.saveDocument(
+        collection,
+        documentId,
+        updatedData
+      );
+
+      console.log("Result: ", result);
+      win?.webContents.send("system-message", "Document saved successfully.");
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : String(error);
+      win?.webContents.send(
+        "system-message",
+        `Error saving document: ${errorMsg}`
+      );
+      console.error("Error saving document:", error);
+    }
+  }
+);
