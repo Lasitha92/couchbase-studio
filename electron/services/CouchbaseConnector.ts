@@ -11,14 +11,14 @@ export class CouchbaseConnector {
     const scopeName = process.env["SCOPE_NAME"];
 
     const response = await fetch(`${connectionString}/query/service`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Basic " + btoa(`${username}:${password}`),
-        },
-        body: JSON.stringify({
-          statement: `SELECT * FROM system:scopes WHERE bucket_name = "${bucketName}" AND name = "${scopeName}";`,
-        }),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Basic " + btoa(`${username}:${password}`),
+      },
+      body: JSON.stringify({
+        statement: `SELECT * FROM system:scopes WHERE bucket_name = "${bucketName}" AND name = "${scopeName}";`,
+      }),
     });
 
     console.log("Connection response: ", response);
@@ -28,34 +28,24 @@ export class CouchbaseConnector {
       throw new Error("Error connecting to the database");
     }
 
-    // Scopes api has a https issue. This is a temporary workaround.
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
-    const collectionsResponse = await fetch(
-      `https://${connectionString}/pools/default/buckets/${bucketName}/scopes`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: "Basic " + btoa(`${username}:${password}`),
-        },
-      }
-    );
-
-    if (!collectionsResponse.ok) {
-      throw new Error("Error connecting to the database");
-    }
-
-    const scopesResponse = await collectionsResponse.json();
-
-    const scope = scopesResponse.scopes.filter(
-      (scope: { name: string }) => scope.name === scopeName
-    )[0];
-
-    const collections = scope.collections.map(
-      (scope: { name: string }) => scope.name
-    );
+    const collections = await CouchbaseConnector.getCollections();
 
     console.log("Available collections:", collections);
+    return collections;
+  }
+
+  private static async getCollections(): Promise<string[]> {
+    const bucket = process.env["BUCKET_NAME"];
+    const scope = process.env["SCOPE_NAME"];
+
+    const keyspaces = (await this.executeQuery(
+      "SELECT * FROM system:keyspaces;"
+    )) as { keyspaces: KeyspaceResult }[];
+
+    const collections = keyspaces
+      .filter((ks) => ks.keyspaces.bucket === bucket && ks.keyspaces.scope === scope)
+      .map((ks) => ks.keyspaces.name);
+
     return collections;
   }
 
@@ -70,15 +60,15 @@ export class CouchbaseConnector {
 
     try {
       const response = await fetch(`${connectionString}/query/service`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Basic " + btoa(`${username}:${password}`),
-          },
-          body: JSON.stringify({
-            statement: query,
-            query_context: `default:${bucketName}.${scopeName}`,
-          }),
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Basic " + btoa(`${username}:${password}`),
+        },
+        body: JSON.stringify({
+          statement: query,
+          query_context: `default:${bucketName}.${scopeName}`,
+        }),
       });
 
       if (!response.ok) {
@@ -207,4 +197,10 @@ export class CouchbaseConnector {
       throw error;
     }
   }
+}
+
+interface KeyspaceResult {
+  bucket: string;
+  scope: string;
+  name: string;
 }
