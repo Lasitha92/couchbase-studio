@@ -57,13 +57,15 @@ Couchbase Studio is a simple yet powerful desktop application that allows you to
 
    ```json
    {
-     "serverUrl": "couchbase://localhost",
+     "serverUrl": "server-url",
      "username": "your-username",
      "password": "your-password",
      "bucketName": "your-bucket",
      "scopeName": "your-scope"
    }
    ```
+
+   > **_NOTE:_** serverUrl for capella server will be in the format of `https://cb.xxxx.cloud.couchbase.com:18093` and for self hosted one it will in the format of `http://xxx:8093`
 
 4. **Start the development server**
 
@@ -147,7 +149,6 @@ couchbase-studio/
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
-
 
 ## License
 
