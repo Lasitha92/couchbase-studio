@@ -2,15 +2,15 @@ export class CouchbaseConnector {
   private constructor() {}
 
   public static async isConnectionValid(): Promise<string[]> {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
     const connectionString = process.env["SERVER_URL"];
     const username = process.env["USERNAME"];
     const password = process.env["PASSWORD"];
     const bucketName = process.env["BUCKET_NAME"];
     const scopeName = process.env["SCOPE_NAME"];
 
-    const response = await fetch(
-      `http://${connectionString}:8093/query/service`,
-      {
+    const response = await fetch(`${connectionString}/query/service`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -19,8 +19,9 @@ export class CouchbaseConnector {
         body: JSON.stringify({
           statement: `SELECT * FROM system:scopes WHERE bucket_name = "${bucketName}" AND name = "${scopeName}";`,
         }),
-      }
-    );
+    });
+
+    console.log("Connection response: ", response);
 
     if (!response.ok) {
       console.error(response);
@@ -68,9 +69,7 @@ export class CouchbaseConnector {
     console.log("Executing query:", query);
 
     try {
-      const response = await fetch(
-        `http://${connectionString}:8093/query/service`,
-        {
+      const response = await fetch(`${connectionString}/query/service`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -80,8 +79,7 @@ export class CouchbaseConnector {
             statement: query,
             query_context: `default:${bucketName}.${scopeName}`,
           }),
-        }
-      );
+      });
 
       if (!response.ok) {
         console.error(response);
@@ -128,7 +126,7 @@ export class CouchbaseConnector {
 
     try {
       const response = await fetch(
-        `http://${connectionString}:8093/query/service`,
+        `${connectionString}/query/service`,
         {
           method: "POST",
           headers: {
@@ -182,7 +180,7 @@ export class CouchbaseConnector {
 
     try {
       const response = await fetch(
-        `http://${connectionString}:8093/query/service`,
+        `${connectionString}/query/service`,
         {
           method: "POST",
           headers: {
