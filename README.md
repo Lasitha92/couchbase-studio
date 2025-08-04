@@ -158,7 +158,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Developer**: Lasitha Bandara
 - **Email**: lybandara@gmail.com
-
-## Version
-
-Current version: 1.0.0
