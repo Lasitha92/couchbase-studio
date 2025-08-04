@@ -106,7 +106,7 @@ function createWindow() {
       try {
         const userConfigPath = path.join(
           app.getPath("documents"),
-          "CouchbaseStudio",
+          "Couchbase Studio",
           "configs.json"
         );
         const configRaw = fs.readFileSync(userConfigPath, "utf-8");
