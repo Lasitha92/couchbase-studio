@@ -24,3 +24,8 @@ release
 *.njsproj
 *.sln
 *.sw?
+
+# Agent and Context files
+CONTEXT.md
+GEMINI.md
+AGENTS.md

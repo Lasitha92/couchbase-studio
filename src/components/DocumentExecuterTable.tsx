@@ -8,13 +8,15 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
 } from "@mui/material";
 import React, { useState } from "react";
-import { FaRegTrashAlt } from "react-icons/fa";
+import { FaEye, FaRegTrashAlt } from "react-icons/fa";
 import { FaPencil } from "react-icons/fa6";
 import DocumentEditorDialog, {
   DocumentModalData,
 } from "./DocumentEditorDialog";
+import DocumentViewerDialog from "./DocumentViewerDialog";
 
 interface DocumentExecuterTableProps {
   queryResult: DocumentExecuterResult[] | null;
@@ -29,6 +31,10 @@ const DocumentExecuterTable: React.FC<DocumentExecuterTableProps> = ({
   const [selectedDocument, setSelectedDocument] =
     useState<DocumentModalData | null>(null);
 
+  const [viewModalOpen, setViewModalOpen] = useState(false);
+  const [viewDocument, setViewDocument] =
+    useState<DocumentModalData | null>(null);
+
   const handleOpenModal = (documentId: string, documentData: unknown) => {
     setSelectedDocument({
       documentId,
@@ -41,6 +47,20 @@ const DocumentExecuterTable: React.FC<DocumentExecuterTableProps> = ({
   const handleCloseModal = () => {
     setModalOpen(false);
     setSelectedDocument(null);
+  };
+
+  const handleOpenViewModal = (documentId: string, documentData: unknown) => {
+    setViewDocument({
+      documentId,
+      documentData: documentData as Record<string, unknown>,
+      collection,
+    });
+    setViewModalOpen(true);
+  };
+
+  const handleCloseViewModal = () => {
+    setViewModalOpen(false);
+    setViewDocument(null);
   };
 
   const handleOnSaveDocument = (
@@ -79,18 +99,32 @@ const DocumentExecuterTable: React.FC<DocumentExecuterTableProps> = ({
                 <TableCell component="th" scope="row">
                   <ButtonGroup
                     variant="contained"
-                    aria-label="Basic button group"
+                    aria-label="Document actions"
                   >
-                    <Button
-                      onClick={() => {
-                        handleOpenModal(row.meta.id, row.data);
-                      }}
-                    >
-                      <FaPencil />
-                    </Button>
-                    <Button disabled >
-                      <FaRegTrashAlt />
-                    </Button>
+                    <Tooltip title="View JSON (Ctrl+F supported)">
+                      <Button
+                        color="info"
+                        onClick={() => {
+                          handleOpenViewModal(row.meta.id, row.data);
+                        }}
+                      >
+                        <FaEye />
+                      </Button>
+                    </Tooltip>
+                    <Tooltip title="Edit Document">
+                      <Button
+                        onClick={() => {
+                          handleOpenModal(row.meta.id, row.data);
+                        }}
+                      >
+                        <FaPencil />
+                      </Button>
+                    </Tooltip>
+                    <Tooltip title="Delete Document">
+                      <Button disabled>
+                        <FaRegTrashAlt />
+                      </Button>
+                    </Tooltip>
                   </ButtonGroup>
                 </TableCell>
                 <TableCell align="left">{row.meta.id}</TableCell>
@@ -102,6 +136,18 @@ const DocumentExecuterTable: React.FC<DocumentExecuterTableProps> = ({
           </TableBody>
         </Table>
       </TableContainer>
+
+      <DocumentViewerDialog
+        open={viewModalOpen}
+        onClose={handleCloseViewModal}
+        selectedDocument={viewDocument}
+        onEditClick={() => {
+          if (viewDocument) {
+            handleOpenModal(viewDocument.documentId, viewDocument.documentData);
+            handleCloseViewModal();
+          }
+        }}
+      />
 
       <DocumentEditorDialog
         open={modalOpen}
