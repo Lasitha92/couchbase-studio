@@ -333,12 +333,14 @@ const DocumentViewerDialog: React.FC<DocumentViewerDialogProps> = ({
       {/* Ctrl + F Search Bar */}
       {isSearchOpen && (
         <Paper
-          elevation={2}
+          elevation={0}
           sx={{
             p: 1,
             px: 2,
-            bgcolor: "#f8f9fa",
-            borderBottom: "1px solid #e0e0e0",
+            bgcolor: (theme) =>
+              theme.palette.mode === "dark" ? "#181a1f" : "#f8f9fa",
+            borderBottom: "1px solid",
+            borderColor: "divider",
             display: "flex",
             alignItems: "center",
             gap: 1.5,
@@ -352,7 +354,14 @@ const DocumentViewerDialog: React.FC<DocumentViewerDialogProps> = ({
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleSearchKeyDown}
             autoFocus
-            sx={{ flex: 1, bgcolor: "#ffffff", maxWidth: "450px" }}
+            sx={{
+              flex: 1,
+              maxWidth: "450px",
+              "& .MuiOutlinedInput-root": {
+                bgcolor: (theme) =>
+                  theme.palette.mode === "dark" ? "#14161a" : "#ffffff",
+              },
+            }}
             slotProps={{
               input: {
                 startAdornment: (
@@ -440,7 +449,8 @@ const DocumentViewerDialog: React.FC<DocumentViewerDialogProps> = ({
         sx={{
           flex: 1,
           overflow: "auto",
-          bgcolor: "#fafafa",
+          bgcolor: (theme) =>
+            theme.palette.mode === "dark" ? "#0f1115" : "#fafafa",
           p: 2,
         }}
       >
@@ -459,8 +469,12 @@ const DocumentViewerDialog: React.FC<DocumentViewerDialogProps> = ({
               sx={{
                 p: 2,
                 m: 0,
-                bgcolor: "#ffffff",
-                border: "1px solid #e0e0e0",
+                bgcolor: (theme) =>
+                  theme.palette.mode === "dark" ? "#14161a" : "#ffffff",
+                color: (theme) =>
+                  theme.palette.mode === "dark" ? "#e6edf3" : "#1f2328",
+                border: "1px solid",
+                borderColor: "divider",
                 borderRadius: "6px",
                 fontFamily: "monospace",
                 fontSize: "12px",

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 import { JsonMatch } from "../utils/jsonTreeUtils";
 
@@ -40,7 +40,7 @@ const HighlightedText: React.FC<HighlightedTextProps> = ({
         id={`json-match-${m.index}`}
         style={{
           backgroundColor: isCurrentActive ? "#ff9800" : "#fff59d",
-          color: isCurrentActive ? "#000" : "inherit",
+          color: "#000000",
           fontWeight: isCurrentActive ? "bold" : "inherit",
           borderRadius: "2px",
           padding: "0 2px",
@@ -74,6 +74,7 @@ interface JsonNodeProps {
   onTogglePath: (path: string) => void;
   matchMap: Map<string, JsonMatch[]>;
   activeMatchIndex: number;
+  isDark: boolean;
 }
 
 const JsonNode: React.FC<JsonNodeProps> = ({
@@ -86,15 +87,25 @@ const JsonNode: React.FC<JsonNodeProps> = ({
   onTogglePath,
   matchMap,
   activeMatchIndex,
+  isDark,
 }) => {
   const isObject = value !== null && typeof value === "object";
   const isArray = Array.isArray(value);
   const isExpanded = expandedPaths.has(path);
 
+  // Palette colors depending on mode
+  const keyColor = isDark ? "#79c0ff" : "#0550ae";
+  const stringColor = isDark ? "#7ee787" : "#0a3069";
+  const numberColor = isDark ? "#d2a8ff" : "#0969da";
+  const booleanColor = isDark ? "#ff7b72" : "#8250df";
+  const nullColor = isDark ? "#8b949e" : "#6e7781";
+  const punctuationColor = isDark ? "#e6edf3" : "#24292f";
+  const indentColor = isDark ? "rgba(255, 255, 255, 0.12)" : "#d0d7de";
+
   const renderKey = () => {
     if (keyName === undefined) return null;
     return (
-      <Box component="span" sx={{ color: "#0550ae", fontWeight: 500, mr: 0.5 }}>
+      <Box component="span" sx={{ color: keyColor, fontWeight: 500, mr: 0.5 }}>
         {typeof keyName === "string" ? (
           <>
             <span>"</span>
@@ -108,9 +119,9 @@ const JsonNode: React.FC<JsonNodeProps> = ({
             <span>"</span>
           </>
         ) : (
-          <span style={{ color: "#6e7781" }}>{keyName}</span>
+          <span style={{ color: nullColor }}>{keyName}</span>
         )}
-        <span style={{ color: "#24292f", marginRight: "4px" }}>:</span>
+        <span style={{ color: punctuationColor, marginRight: "4px" }}>:</span>
       </Box>
     );
   };
@@ -130,7 +141,11 @@ const JsonNode: React.FC<JsonNodeProps> = ({
             display: "flex",
             alignItems: "center",
             cursor: "pointer",
-            "&:hover": { bgcolor: "rgba(0, 0, 0, 0.03)" },
+            "&:hover": {
+              bgcolor: isDark
+                ? "rgba(255, 255, 255, 0.04)"
+                : "rgba(0, 0, 0, 0.03)",
+            },
             borderRadius: "4px",
             py: "1px",
           }}
@@ -145,7 +160,7 @@ const JsonNode: React.FC<JsonNodeProps> = ({
               width: 16,
               height: 16,
               mr: 0.5,
-              color: "#57606a",
+              color: isDark ? "#8b949e" : "#57606a",
               flexShrink: 0,
             }}
           >
@@ -156,15 +171,20 @@ const JsonNode: React.FC<JsonNodeProps> = ({
             )}
           </Box>
           {renderKey()}
-          <span style={{ color: "#24292f", fontWeight: 600 }}>{openBracket}</span>
+          <span style={{ color: punctuationColor, fontWeight: 600 }}>
+            {openBracket}
+          </span>
           {!isExpanded && (
             <Typography
               component="span"
               sx={{
                 fontSize: "11px",
-                color: "#6e7781",
-                bgcolor: "#f6f8fa",
-                border: "1px solid #d0d7de",
+                color: nullColor,
+                bgcolor: isDark
+                  ? "rgba(255, 255, 255, 0.06)"
+                  : "#f6f8fa",
+                border: "1px solid",
+                borderColor: indentColor,
                 borderRadius: "10px",
                 px: 1,
                 py: "1px",
@@ -176,9 +196,9 @@ const JsonNode: React.FC<JsonNodeProps> = ({
             </Typography>
           )}
           {!isExpanded && (
-            <span style={{ color: "#24292f", fontWeight: 600 }}>
+            <span style={{ color: punctuationColor, fontWeight: 600 }}>
               {closeBracket}
-              {!isLast && <span style={{ color: "#6e7781" }}>,</span>}
+              {!isLast && <span style={{ color: nullColor }}>,</span>}
             </span>
           )}
         </Box>
@@ -188,7 +208,8 @@ const JsonNode: React.FC<JsonNodeProps> = ({
             sx={{
               pl: 2.5,
               ml: 1,
-              borderLeft: "1px dashed #d0d7de",
+              borderLeft: "1px dashed",
+              borderColor: indentColor,
             }}
           >
             {entries.map(([k, childVal], idx) => {
@@ -205,6 +226,7 @@ const JsonNode: React.FC<JsonNodeProps> = ({
                   onTogglePath={onTogglePath}
                   matchMap={matchMap}
                   activeMatchIndex={activeMatchIndex}
+                  isDark={isDark}
                 />
               );
             })}
@@ -213,9 +235,9 @@ const JsonNode: React.FC<JsonNodeProps> = ({
 
         {isExpanded && (
           <Box sx={{ pl: 2.5, ml: 1 }}>
-            <span style={{ color: "#24292f", fontWeight: 600 }}>
+            <span style={{ color: punctuationColor, fontWeight: 600 }}>
               {closeBracket}
-              {!isLast && <span style={{ color: "#6e7781" }}>,</span>}
+              {!isLast && <span style={{ color: nullColor }}>,</span>}
             </span>
           </Box>
         )}
@@ -227,7 +249,7 @@ const JsonNode: React.FC<JsonNodeProps> = ({
   const renderValue = () => {
     if (value === null) {
       return (
-        <span style={{ color: "#6e7781", fontStyle: "italic" }}>
+        <span style={{ color: nullColor, fontStyle: "italic" }}>
           <HighlightedText
             text="null"
             path={path}
@@ -240,7 +262,7 @@ const JsonNode: React.FC<JsonNodeProps> = ({
     }
     if (value === undefined) {
       return (
-        <span style={{ color: "#6e7781", fontStyle: "italic" }}>
+        <span style={{ color: nullColor, fontStyle: "italic" }}>
           <HighlightedText
             text="undefined"
             path={path}
@@ -253,7 +275,7 @@ const JsonNode: React.FC<JsonNodeProps> = ({
     }
     if (typeof value === "string") {
       return (
-        <span style={{ color: "#0a3069", wordBreak: "break-all" }}>
+        <span style={{ color: stringColor, wordBreak: "break-all" }}>
           <span>"</span>
           <HighlightedText
             text={value}
@@ -268,7 +290,7 @@ const JsonNode: React.FC<JsonNodeProps> = ({
     }
     if (typeof value === "number") {
       return (
-        <span style={{ color: "#0969da", fontWeight: 500 }}>
+        <span style={{ color: numberColor, fontWeight: 500 }}>
           <HighlightedText
             text={String(value)}
             path={path}
@@ -281,7 +303,7 @@ const JsonNode: React.FC<JsonNodeProps> = ({
     }
     if (typeof value === "boolean") {
       return (
-        <span style={{ color: "#8250df", fontWeight: 600 }}>
+        <span style={{ color: booleanColor, fontWeight: 600 }}>
           <HighlightedText
             text={String(value)}
             path={path}
@@ -311,7 +333,11 @@ const JsonNode: React.FC<JsonNodeProps> = ({
         lineHeight: "22px",
         display: "flex",
         alignItems: "flex-start",
-        "&:hover": { bgcolor: "rgba(0, 0, 0, 0.02)" },
+        "&:hover": {
+          bgcolor: isDark
+            ? "rgba(255, 255, 255, 0.04)"
+            : "rgba(0, 0, 0, 0.02)",
+        },
         borderRadius: "4px",
         py: "1px",
       }}
@@ -320,7 +346,7 @@ const JsonNode: React.FC<JsonNodeProps> = ({
       <Box sx={{ display: "inline-flex", flexWrap: "wrap", alignItems: "center" }}>
         {renderKey()}
         {renderValue()}
-        {!isLast && <span style={{ color: "#6e7781" }}>,</span>}
+        {!isLast && <span style={{ color: nullColor }}>,</span>}
       </Box>
     </Box>
   );
@@ -341,12 +367,17 @@ const JsonTreeView: React.FC<JsonTreeViewProps> = ({
   expandedPaths,
   onTogglePath,
 }) => {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
+
   return (
     <Box
       sx={{
         p: 2,
-        bgcolor: "#ffffff",
+        bgcolor: isDark ? "#14161a" : "#ffffff",
         borderRadius: "6px",
+        border: "1px solid",
+        borderColor: "divider",
         fontFamily:
           'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace',
         overflow: "auto",
@@ -361,6 +392,7 @@ const JsonTreeView: React.FC<JsonTreeViewProps> = ({
         onTogglePath={onTogglePath}
         matchMap={matchMap}
         activeMatchIndex={activeMatchIndex}
+        isDark={isDark}
       />
     </Box>
   );

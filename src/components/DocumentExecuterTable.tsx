@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   ButtonGroup,
   Paper,
@@ -9,6 +10,7 @@ import {
   TableHead,
   TableRow,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import React, { useState } from "react";
 import { FaEye, FaRegTrashAlt } from "react-icons/fa";
@@ -76,60 +78,102 @@ const DocumentExecuterTable: React.FC<DocumentExecuterTableProps> = ({
   };
 
   if (!queryResult) {
-    return <div>This is executer 1. Your result will be displayed here</div>;
+    return (
+      <Box sx={{ p: 4, textAlign: "center", color: "text.secondary" }}>
+        <Typography variant="body2">
+          Document 1 results will appear here once executed.
+        </Typography>
+      </Box>
+    );
   }
 
   return (
     <>
-      <TableContainer component={Paper}>
-        <Table aria-label="simple table">
+      <TableContainer component={Paper} elevation={0} sx={{ borderRadius: 0 }}>
+        <Table aria-label="Couchbase documents table" size="small">
           <TableHead>
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell align="left">ID</TableCell>
-              <TableCell align="left">DOCUMENT</TableCell>
+            <TableRow
+              sx={{
+                bgcolor: (theme) =>
+                  theme.palette.mode === "dark" ? "#14161a" : "#f6f8fa",
+              }}
+            >
+              <TableCell sx={{ width: 140, fontWeight: 700 }}>Actions</TableCell>
+              <TableCell align="left" sx={{ width: 220, fontWeight: 700 }}>
+                ID
+              </TableCell>
+              <TableCell align="left" sx={{ fontWeight: 700 }}>
+                Document Preview
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {queryResult.map((row) => (
               <TableRow
                 key={row.meta.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                hover
+                sx={{
+                  "&:last-child td, &:last-child th": { border: 0 },
+                }}
               >
                 <TableCell component="th" scope="row">
                   <ButtonGroup
                     variant="contained"
+                    size="small"
                     aria-label="Document actions"
                   >
                     <Tooltip title="View JSON (Ctrl+F supported)">
                       <Button
-                        color="info"
+                        color="primary"
                         onClick={() => {
                           handleOpenViewModal(row.meta.id, row.data);
                         }}
+                        sx={{ px: 1 }}
                       >
                         <FaEye />
                       </Button>
                     </Tooltip>
                     <Tooltip title="Edit Document">
                       <Button
+                        color="inherit"
                         onClick={() => {
                           handleOpenModal(row.meta.id, row.data);
                         }}
+                        sx={{ px: 1 }}
                       >
                         <FaPencil />
                       </Button>
                     </Tooltip>
                     <Tooltip title="Delete Document">
-                      <Button disabled>
+                      <Button disabled sx={{ px: 1 }}>
                         <FaRegTrashAlt />
                       </Button>
                     </Tooltip>
                   </ButtonGroup>
                 </TableCell>
-                <TableCell align="left">{row.meta.id}</TableCell>
-                <TableCell align="left">
-                  {JSON.stringify(row.data).slice(0, 300)}
+                <TableCell
+                  align="left"
+                  sx={{
+                    fontFamily: "monospace",
+                    fontSize: "12px",
+                    fontWeight: 600,
+                  }}
+                >
+                  {row.meta.id}
+                </TableCell>
+                <TableCell
+                  align="left"
+                  sx={{
+                    fontFamily: "monospace",
+                    fontSize: "12px",
+                    color: "text.secondary",
+                    maxWidth: 500,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {JSON.stringify(row.data)}
                 </TableCell>
               </TableRow>
             ))}
