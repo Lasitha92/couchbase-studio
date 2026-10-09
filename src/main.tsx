@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
+import { ColorModeProvider } from "./theme/ThemeContext";
 
 // Extend Window interface
 declare global {
@@ -91,6 +92,8 @@ window.ipcRenderer.on("app-config", (_event: unknown, config: unknown) => {
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <App />
+    <ColorModeProvider>
+      <App />
+    </ColorModeProvider>
   </React.StrictMode>
 );
