@@ -1,16 +1,17 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import ConnectionCreator from "./components/ConnectionCreator";
 import ExecuterTabs from "./components/ExecuterTabs";
+import AppHeader from "./components/AppHeader";
+import SystemMessageAlert from "./components/SystemMessageAlert";
 import { useEffect, useState } from "react";
 
 function App() {
-
   const [systemMessage, setSystemMessage] = useState<string>("");
 
   useEffect(() => {
     const handleSystemMessageUpdate = () => {
       const message = window.systemMessage;
-      if (message) {
+      if (message !== undefined) {
         setSystemMessage(message);
       }
     };
@@ -18,17 +19,24 @@ function App() {
     window.addEventListener("system-message-updated", handleSystemMessageUpdate);
 
     return () => {
-      window.removeEventListener("system-message-updated", handleSystemMessageUpdate);
+      window.removeEventListener(
+        "system-message-updated",
+        handleSystemMessageUpdate
+      );
     };
   }, []);
 
   return (
-    <Box padding={1}>
-      <ConnectionCreator />
-      <Box padding={1}>
-        <Typography color="textDisabled">{systemMessage}</Typography>
+    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      <AppHeader />
+      <Box sx={{ p: 2, flex: 1, display: "flex", flexDirection: "column" }}>
+        <ConnectionCreator />
+        <SystemMessageAlert
+          message={systemMessage}
+          onClose={() => setSystemMessage("")}
+        />
+        <ExecuterTabs />
       </Box>
-      <ExecuterTabs />
     </Box>
   );
 }
