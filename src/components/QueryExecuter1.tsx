@@ -32,43 +32,38 @@ const QueryExecuter1: React.FC = () => {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-      {/* Query Input Box */}
-      <Box sx={{ position: "relative" }}>
-        <textarea
-          rows={5}
-          placeholder="Enter N1QL / SQL++ query (e.g. SELECT * FROM `bucket` LIMIT 10;)"
-          value={query}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            window.query1Text = e.target.value;
-          }}
-          style={{
-            width: "100%",
-            boxSizing: "border-box",
-            fontFamily:
-              'ui-monospace, "SF Mono", "Fira Code", Consolas, monospace',
-            fontSize: "13px",
-            lineHeight: "1.6",
-            padding: "12px",
-            borderRadius: "6px",
-            backgroundColor: isDark ? "#14161a" : "#ffffff",
-            color: isDark ? "#e6edf3" : "#1f2328",
-            border: isDark
-              ? "1px solid rgba(255, 255, 255, 0.15)"
-              : "1px solid rgba(0, 0, 0, 0.15)",
-            outline: "none",
-            resize: "vertical",
-          }}
-          onFocus={(e) => {
-            e.currentTarget.style.borderColor = "#EA2328";
-          }}
-          onBlur={(e) => {
-            e.currentTarget.style.borderColor = isDark
-              ? "rgba(255, 255, 255, 0.15)"
-              : "rgba(0, 0, 0, 0.15)";
-          }}
-        />
-      </Box>
+      {/* Query Input Box with pure theme styling */}
+      <Box
+        component="textarea"
+        rows={5}
+        placeholder="Enter N1QL / SQL++ query (e.g. SELECT * FROM `bucket` LIMIT 10;)"
+        value={query}
+        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+          setQuery(e.target.value);
+          window.query1Text = e.target.value;
+        }}
+        sx={{
+          width: "100%",
+          boxSizing: "border-box",
+          fontFamily:
+            'ui-monospace, "SF Mono", "Fira Code", Consolas, monospace',
+          fontSize: "13px",
+          lineHeight: "1.6",
+          p: 1.5,
+          borderRadius: 1,
+          bgcolor: "background.paper",
+          color: "text.primary",
+          border: "1px solid",
+          borderColor: "divider",
+          outline: "none",
+          resize: "vertical",
+          transition: "border-color 0.2s ease, box-shadow 0.2s ease",
+          "&:focus": {
+            borderColor: "primary.main",
+            boxShadow: (theme) => `0 0 0 1px ${theme.palette.primary.main}`,
+          },
+        }}
+      />
 
       {/* Action Row */}
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
@@ -90,8 +85,8 @@ const QueryExecuter1: React.FC = () => {
           width: "100%",
           minHeight: "300px",
           p: 2,
-          borderRadius: "6px",
-          bgcolor: isDark ? "#14161a" : "#ffffff",
+          borderRadius: 1,
+          bgcolor: "background.paper",
           overflow: "auto",
         }}
       >

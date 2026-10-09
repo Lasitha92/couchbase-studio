@@ -96,8 +96,8 @@ const JsonNode: React.FC<JsonNodeProps> = ({
   // Palette colors depending on mode
   const keyColor = isDark ? "#79c0ff" : "#0550ae";
   const stringColor = isDark ? "#7ee787" : "#0a3069";
-  const numberColor = isDark ? "#d2a8ff" : "#0969da";
-  const booleanColor = isDark ? "#ff7b72" : "#8250df";
+  const numberColor = isDark ? "#79c0ff" : "#0969da";
+  const booleanColor = isDark ? "#d2a8ff" : "#8250df";
   const nullColor = isDark ? "#8b949e" : "#6e7781";
   const punctuationColor = isDark ? "#e6edf3" : "#24292f";
   const indentColor = isDark ? "rgba(255, 255, 255, 0.12)" : "#d0d7de";

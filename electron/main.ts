@@ -83,7 +83,7 @@ const customMenu = [
 function createWindow() {
   win = new BrowserWindow({
     title: "Couchbase Studio",
-    icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
+    icon: path.join(process.env.VITE_PUBLIC, "logo.svg"),
     width: 1200,
     height: 600,
     webPreferences: {

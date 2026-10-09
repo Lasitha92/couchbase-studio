@@ -9,8 +9,9 @@ import {
   Chip,
   useTheme,
 } from "@mui/material";
-import { FaSun, FaMoon, FaDatabase } from "react-icons/fa";
+import { FaSun, FaMoon } from "react-icons/fa";
 import { useColorMode } from "../theme/useColorMode";
+import Logo from "./Logo";
 
 export const AppHeader: React.FC = () => {
   const { mode, toggleColorMode } = useColorMode();
@@ -74,20 +75,7 @@ export const AppHeader: React.FC = () => {
       >
         {/* Brand & Title */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              bgcolor: "primary.main",
-              color: "#ffffff",
-              width: 30,
-              height: 30,
-              borderRadius: "6px",
-            }}
-          >
-            <FaDatabase size={15} />
-          </Box>
+          <Logo size={30} />
           <Typography
             variant="subtitle1"
             sx={{

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { createTheme, ThemeProvider as MuiThemeProvider, CssBaseline } from "@mui/material";
 import { ColorMode, ColorModeContext } from "./useColorMode";
 
-const COUCHBASE_RED = "#EA2328";
+const PRIMARY_BLUE = "#2563EB";
 
 export const ColorModeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [mode, setModeState] = useState<ColorMode>(() => {
@@ -34,13 +34,33 @@ export const ColorModeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       palette: {
         mode,
         primary: {
-          main: COUCHBASE_RED,
-          light: "#F05357",
-          dark: "#C41C20",
+          main: PRIMARY_BLUE,
+          light: "#3B82F6",
+          dark: "#1D4ED8",
           contrastText: "#ffffff",
         },
         secondary: {
-          main: isDark ? "#58a6ff" : "#0969da",
+          main: isDark ? "#38BDF8" : "#0284C7",
+        },
+        error: {
+          main: "#DC2626",
+          light: "#EF4444",
+          dark: "#B91C1C",
+        },
+        warning: {
+          main: "#D97706",
+          light: "#F59E0B",
+          dark: "#B45309",
+        },
+        success: {
+          main: "#16A34A",
+          light: "#22C55E",
+          dark: "#15803D",
+        },
+        info: {
+          main: "#0284C7",
+          light: "#38BDF8",
+          dark: "#0369A1",
         },
         background: {
           default: isDark ? "#0f1115" : "#f6f8fa",
@@ -97,7 +117,7 @@ export const ColorModeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
               fontSize: "14px",
               minHeight: 44,
               "&.Mui-selected": {
-                color: COUCHBASE_RED,
+                color: PRIMARY_BLUE,
               },
             },
           },
@@ -105,7 +125,7 @@ export const ColorModeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         MuiTabs: {
           styleOverrides: {
             indicator: {
-              backgroundColor: COUCHBASE_RED,
+              backgroundColor: PRIMARY_BLUE,
               height: 3,
             },
           },
